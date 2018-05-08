@@ -21,6 +21,8 @@ java {
 
 
 val baseVersion = "2018.2"
+val buildCounter = ext.properties["build.number"] ?: "9999"
+version = "$baseVersion.$buildCounter"
 
 intellij {
     type = "RD"
@@ -108,6 +110,13 @@ tasks {
         val rerunSuccessfulTests = false
         outputs.upToDateWhen { !rerunSuccessfulTests }
 
+    }
+
+    "assemble" {
+        doLast {
+            logger.lifecycle("Plugin version: $version")
+            logger.lifecycle("##teamcity[buildNumber '$version']")
+        }
     }
 
     "prepare" {
